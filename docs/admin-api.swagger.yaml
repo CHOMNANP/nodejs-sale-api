@@ -1,0 +1,83 @@
+swagger: "2.0"
+info:
+  description: "Admin Api Doc"
+  version: "0.1.0"
+  title: "Admin Api Doc"
+basePath: "/api/admin"
+tags:
+  - name: "sale"
+    description: ""
+
+paths:
+  /sale/summary:
+    get:
+      security:
+        - Auth: []
+      tags:
+        - "sale"
+      summary: ""
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "dateFrom"
+          required: true
+          type: "string"
+          format: "date"
+        - in: "query"
+          name: "dateTo"
+          required: true
+          type: "string"
+          format: "date"
+        - in: "query"
+          name: "stats"
+          required: true
+          type: "string"
+          enum: ["day", "week", "month"]
+      responses:
+        "401":
+          description: "Unauthorized"
+        "200":
+          description: "Success"
+  /sale:
+    post:
+      security:
+        - Auth: []
+      tags:
+        - "sale"
+      summary: ""
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/AddSale"
+      responses:
+        "401":
+          description: "Unauthorized"
+        "200":
+          description: "Success"
+
+definitions:
+  AddSale:
+    type: "object"
+    properties:
+      userName:
+        type: "string"
+      amount:
+        type: "number"
+
+securityDefinitions:
+  Auth:
+    type: apiKey
+    in: header
+    name: Authorization

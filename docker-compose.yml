@@ -1,0 +1,43 @@
+version: "3.4"
+
+services:
+
+  postgres:
+    image: postgis/postgis:13-master
+    hostname: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: dbName
+      POSTGRES_USER: userName
+      POSTGRES_PASSWORD: userSecretPassword
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
+
+  api:
+    container_name: api
+    build:
+      context: .
+    # network_mode: "host"
+    volumes:
+      # Mounts the project directory on the host to /app inside the container,
+      # allowing you to modify the code without having to rebuild the image.
+      - .:/app
+      # Just specify a path and let the Engine create a volume.
+      # Data present in the base image at the specified mount point will be copied
+      # over to the new volume upon volume initialization.
+      # node_modules from this new volume will be used and not from your local dev env.
+      - /app/node_modules/
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    restart: "always"
+
+    #Set environment variables from this file
+    env_file:
+      - .env
